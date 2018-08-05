@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.itheima.dao.UserMapper" >
+  
+    <select id="findUserById" parameterType="int" resultType="cn.itheima.pojo.User">
+		select * from user where id=#{id}
+	</select>
+	
+	<select id="findUserByUserName" parameterType="string" resultType="cn.itheima.pojo.User">
+		select * from user where username like '%${value}%'
+	</select>
+	
+	<insert id="insertUser" parameterType="cn.itheima.pojo.User" >
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into user (username,birthday,sex,address) values(#{username},#{birthday},#{sex},#{address})
+	</insert>
+</mapper>

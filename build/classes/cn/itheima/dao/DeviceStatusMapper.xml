@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.itheima.dao.DeviceStatusMapper">
+
+	<select id="findDeviceStatusById" parameterType="int"
+		resultType="cn.itheima.pojo.DeviceStatus">
+		select * from deviceStatus where deviceId=#{id}
+	</select>
+
+	<select id="findDeviceStatusByDate" parameterType="Date"
+		resultType="cn.itheima.pojo.DeviceStatus">
+		select * from deviceStatus where date = #{id}
+	</select>
+
+	<select id="findDeviceStatusByDeviceStatus" parameterType="cn.itheima.pojo.selectObj_BuildFloorRoomDateType"
+		resultType="cn.itheima.pojo.DeviceStatus">
+		select * from deviceStatus 
+		<where>
+			<if test="deviceId != null and deviceId != ''">
+				and deviceId = #{deviceId}
+			</if>
+			<if test="startTime != null and startTime != ''">
+				and date &gt;=  #{startTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and date &lt; #{endTime}
+			</if>
+		</where>
+	</select>
+
+	<select id="findDeviceStatusByBuildFloorDateType" parameterType="cn.itheima.pojo.selectObj_BuildFloorRoomDateType"
+		resultType="cn.itheima.pojo.DeviceStatus">
+		SELECT * FROM deviceStatus WHERE deviceId IN (SELECT
+		DISTINCT deviceId FROM deviceInformation
+		WHERE buildingId=#{buildingId}
+		AND FLOOR=#{floor} AND room=#{room} AND
+		TYPE=#{type}) AND DATE &gt;=
+		#{startTime} AND DATE &lt;= #{endTime}
+	</select>
+
+	<insert id="insertDeviceStatus" parameterType="cn.itheima.pojo.DeviceStatus">		
+		insert into deviceStatus (deviceId,date,power)
+		values(#{deviceId},#{date},#{power})
+	</insert>
+</mapper>
