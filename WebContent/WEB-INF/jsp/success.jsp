@@ -9,7 +9,8 @@
 <title>查询商品列表</title>
 </head>
 <body> 
-成功!
+成功!<br>
+<a href="http://localhost:8080/ssm0523">返回首页</a><br>
 </body>
 
 </html>

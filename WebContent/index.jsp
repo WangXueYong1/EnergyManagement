@@ -7,13 +7,15 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<a href="http://localhost:8080/ssm0523/list.action">list</a><br>
-	<a href="http://localhost:8080/ssm0523/findUserByid.action?id=1">findUserByid</a><br>
-	<a href="http://localhost:8080/ssm0523/monitor.action">monitor</a><br>
-	<a href="http://localhost:8080/ssm0523/roomInformation/monitor.action">roomInformationMonitor</a><br>
-	<a href="http://localhost:8080/ssm0523/DeviceInformation/findById.action?id=1">DeviceInformation/findById.action?id=1</a><br>
-	<a href="http://localhost:8080/ssm0523/deviceStatus/findById.action?id=1">deviceStatus/findById.action?id=1</a><br>
-	<a href="http://localhost:8080/ssm0523/DeviceInformation/findFloorByBuilding.action?buildingId=1">DeviceInformation/findFloorByBuilding.action?buildingId=1</a><br>
-	<a href="http://localhost:8080/ssm0523/deviceStatus/insertJsp.action">插入数据</a><br>
+	<%-- //${pageContext.request.contextPath }/login/submit.action --%>
+	<a href="${pageContext.request.contextPath }/monitor.action">roomInformationMonitor</a><br>
+	<a href="${pageContext.request.contextPath }/monitor.action">monitor</a><br>
+	<a href="${pageContext.request.contextPath }/roomInformation/monitor.action">roomInformationMonitor</a><br>
+	<a href="${pageContext.request.contextPath }/DeviceInformation/findById.action?id=1">DeviceInformation/findById.action?id=1</a><br>
+	<a href="${pageContext.request.contextPath }/deviceStatus/findById.action?id=1">deviceStatus/findById.action?id=1</a><br>
+	<a href="${pageContext.request.contextPath }/DeviceInformation/findFloorByBuilding.action?buildingId=1">DeviceInformation/findFloorByBuilding.action?buildingId=1</a><br>
+	<a href="${pageContext.request.contextPath }/deviceStatus/insertJsp.action">插入数据</a><br>
+	<a href="${pageContext.request.contextPath }/deviceStatus/receiveJsp.action">接收数据</a><br>
+	<a href="${pageContext.request.contextPath }/deviceStatus/train.action">训练神经网络数据</a><br>
 </body>
 </html>

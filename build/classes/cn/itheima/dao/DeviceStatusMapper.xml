@@ -39,7 +39,7 @@
 	</select>
 
 	<insert id="insertDeviceStatus" parameterType="cn.itheima.pojo.DeviceStatus">		
-		insert into deviceStatus (deviceId,date,power)
-		values(#{deviceId},#{date},#{power})
+		insert into deviceStatus (deviceId,date,power,predictPower)
+		values(#{deviceId},#{date},#{power},#{predictPower})
 	</insert>
 </mapper>

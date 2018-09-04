@@ -6,6 +6,13 @@ public class DeviceStatus {
 	int deviceId;
 	Date date;
 	Double power;
+	Double predictPower;
+	public Double getPredictPower() {
+		return predictPower;
+	}
+	public void setPredictPower(Double predictPower) {
+		this.predictPower = predictPower;
+	}
 	public int getDeviceId() {
 		return deviceId;
 	}

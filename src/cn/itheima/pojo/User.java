@@ -6,7 +6,7 @@ public class User {
     private Integer id;
 
     private String username;
-
+    private String password;
     private Date birthday;
 
     private String sex;
@@ -29,7 +29,15 @@ public class User {
         this.username = username == null ? null : username.trim();
     }
 
-    public Date getBirthday() {
+    public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Date getBirthday() {
         return birthday;
     }
 

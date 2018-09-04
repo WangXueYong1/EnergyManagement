@@ -7,11 +7,25 @@ public class DeviceInformation {
 	int floor;
 	int room;
 	String name;
+	boolean is_working;
+	String energy_consumption_status;
 	public int getDeviceId() {
 		return deviceId;
 	}
 	public void setDeviceId(int deviceId) {
 		this.deviceId = deviceId;
+	}
+	public boolean isIs_working() {
+		return is_working;
+	}
+	public void setIs_working(boolean is_working) {
+		this.is_working = is_working;
+	}
+	public String getEnergy_consumption_status() {
+		return energy_consumption_status;
+	}
+	public void setEnergy_consumption_status(String energy_consumption_status) {
+		this.energy_consumption_status = energy_consumption_status;
 	}
 	public String getType() {
 		return type;

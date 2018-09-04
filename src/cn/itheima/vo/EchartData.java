@@ -6,5 +6,6 @@ import java.util.List;
 
 public class EchartData {
 	public List<Double> data = new ArrayList<>();
+	public List<Double> data2 = new ArrayList<>();
 	public List<String> xAxisData = new ArrayList<>();
 }

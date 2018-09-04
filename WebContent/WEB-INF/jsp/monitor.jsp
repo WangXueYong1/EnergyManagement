@@ -55,32 +55,36 @@
 		});
 
 		
-		 $("#buildingList").change(function(){
-             var $buildId=$(this).val();
-             $.get("http://localhost:8080/ssm0523/DeviceInformation/findFloorByBuilding.action",{"buildingId":$buildId},function(obj){
-                var $city=$("#floorList");
-                 $city.html("<option>-请选择-</option>");
-                 if(obj!=null){
-                     $(obj).each(function(){
-                         $city.append($("<option value='"+this+"'>第"+this+"层</option>"));
-                     });
-                 } 
-             },"json");
-         });
-		 
-		 $("#floorList").change(function(){
+		function findFloor(){
+	        var $buildId=$("#buildingList").val();
+	        $.get("http://localhost:8080/ssm0523/DeviceInformation/findFloorByBuilding.action",{"buildingId":$buildId},function(obj){
+	           var $city=$("#floorList");
+	            $city.html("");
+	            if(obj!=null){
+	                $(obj).each(function(){
+	                    $city.append($("<option value='"+this+"'>第"+this+"层</option>"));
+	                });
+	            } 
+	        },"json");
+	    }
+		function findRoom(){
 			 var $buildId=$("#buildingList").val();
-             var $floor=$("#floorList").val();
-             $.get("http://localhost:8080/ssm0523/DeviceInformation/findRoomByBuildingFloor.action",{"buildingId":$buildId,"floor":$floor},function(obj){
-                var $city=$("#roomList");
-                 $city.html("<option>-请选择-</option>");
-                 if(obj!=null){
-                     $(obj).each(function(){
-                         $city.append($("<option value='"+this+"'>"+this+"房间</option>"));
-                     });
-                 } 
-             },"json");
-         });
+		     var $floor=$("#floorList").val();
+		     $.get("http://localhost:8080/ssm0523/DeviceInformation/findRoomByBuildingFloor.action",{"buildingId":$buildId,"floor":$floor},function(obj){
+		        var $city=$("#roomList");
+		         $city.html("");
+		         if(obj!=null){
+		             $(obj).each(function(){
+		                 $city.append($("<option value='"+this+"'>"+this+"房间</option>"));
+		             });
+		         } 
+		     },"json");
+	    }
+
+	         $("#buildingList").click(findFloor);		 
+			 $("#floorList").click(findRoom);
+			/*  $("#roomList").click(findRoom);
+			 $("#floorList").click(findFloor); */
 		 
 		 $("#roomList").change(function(){
 			 var buildId=$("#buildingList").val();
@@ -112,22 +116,25 @@
 						data : dataLegend
 					},
 					xAxis : {
+						name: '时间',
 						type : 'category',
 						boundaryGap : false,
 						data : xAxisData
 					},
 					yAxis : {
+						name: '功耗(kw•h)',
 						type : 'value'
 					},
-					series : {
+					series :[{
 						name : '窗帘1',
 						type : 'line',
 						data : data
-					}
+					}]
 				}
 			myChart.setOption(option);	
 			$("#main3").show();
 		 
+			//按小时查看
 		 $("#button1").click(function(){
 			var deviceId=$("#deviceList").val();
             var startTime=$("#startTime").val();           
@@ -135,14 +142,27 @@
             var data={"startTime":startTime,"endTime":endTime,"deviceId":deviceId};
             $.get("http://localhost:8080/ssm0523/deviceStatus/findDeviceStatusByDeviceInformation.action"
            			  ,data,function(obj){
-           				var dataLegend = [ '空调1' ];
+           				option.title= {text : '实际功耗'},
+           				option.legend={data:['实际功耗']};
            				option.xAxis.data =obj.xAxisData;
-           				option.series.data =obj.data;        				
+           				option.series[0]={
+	    						name : '实际功耗',
+	    						type : 'line',
+	    						data : obj.data
+	    				}
+           				option.series[1]={
+    						name : '预测功耗',
+    						type : 'line',
+    						data : []
+    					}
+           				//option.series[1].data =obj.data2;
+           				myChart.clear();
         				myChart.setOption(option);	
         				$("#main0").show();
                      },"json");
          });
 		 
+		//按天查看
 		 $("#button2").click(function(){
 				var deviceId=$("#deviceList").val();
 	            var startTime=$("#startTime").val();           
@@ -150,13 +170,36 @@
 	            var data={"startTime":startTime,"endTime":endTime,"deviceId":deviceId};
 	            $.get("http://localhost:8080/ssm0523/deviceStatus/findDeviceStatusByDeviceInformation2.action"
 	           			  ,data,function(obj){
+	           				/* myChart =echarts.init(document.getElementById('main0'));
 	           				var dataLegend = [ '空调1' ];
 	           				option.xAxis.data =obj.xAxisData;
-	           				option.series.data =obj.data;        				
+	           				option.series[0].data =obj.data;
+	           				option.series[1].data ={};
+	           				myChart.clear();        				
+	        				myChart.setOption(option);	
+	        				$("#main0").show(); */
+	        				
+	           				option.title= {text : '实际功耗'},
+	           				option.legend={data:['实际功耗']};
+	           				option.xAxis.data =obj.xAxisData;
+	           				option.series[0]={
+		    						name : '实际功耗',
+		    						type : 'line',
+		    						data : obj.data
+		    				}
+	           				option.series[1]={
+	    						name : '预测功耗',
+	    						type : 'line',
+	    						data : []
+	    					}
+	           				//option.series[1].data =obj.data2;
+	           				myChart.clear();
 	        				myChart.setOption(option);	
 	        				$("#main0").show();
 	                     },"json");
 	     });
+		
+		//按月查看
 		 $("#button3").click(function(){
 				var deviceId=$("#deviceList").val();
 	            var startTime=$("#startTime").val();           
@@ -164,9 +207,62 @@
 	            var data={"startTime":startTime,"endTime":endTime,"deviceId":deviceId};
 	            $.get("http://localhost:8080/ssm0523/deviceStatus/findDeviceStatusByDeviceInformation3.action"
 	           			  ,data,function(obj){
-	           				var dataLegend = [ '空调1' ];
+	           				/* myChart =echarts.init(document.getElementById('main0'));
+	           				option.series[0].data =obj.data;
+	           				option.series[1].data ={};
 	           				option.xAxis.data =obj.xAxisData;
-	           				option.series.data =obj.data;        				
+	           				myChart.clear();      				
+	        				myChart.setOption(option);	
+	        				$("#main0").show(); */
+	        				
+	        				
+	        				
+
+	           				option.title= {text : '实际功耗'},
+	           				option.legend={data:['实际功耗']};
+	           				option.xAxis.data =obj.xAxisData;
+	           				option.series[0]={
+		    						name : '实际功耗',
+		    						type : 'line',
+		    						data : obj.data
+		    				}
+	           				option.series[1]={
+	    						name : '预测功耗',
+	    						type : 'line',
+	    						data : []
+	    					}
+	           				//option.series[1].data =obj.data2;
+	           				myChart.clear();
+	        				myChart.setOption(option);	
+	        				$("#main0").show();
+	        				
+	        				
+	                     },"json");
+	     });
+		
+		//当天预测功耗查看
+		 $("#button4").click(function(){
+				var deviceId=$("#deviceList").val();
+	            var startTime=$("#startTime").val();           
+	            var endTime=$("#endTime").val();            
+	            var data={"startTime":startTime,"endTime":endTime,"deviceId":deviceId};
+	            $.get("http://localhost:8080/ssm0523/deviceStatus/findDeviceStatusByDeviceInformation4.action"
+	           			  ,data,function(obj){
+	           				option.title= {text : '实际功耗预测功耗对比'},
+	           				option.legend={data:['实际功耗','预测功耗']};
+	           				option.xAxis.data =obj.xAxisData;
+	           				option.series[0]={
+		    						name : '实际功耗',
+		    						type : 'line',
+		    						data : obj.data
+		    				}
+	           				option.series[1]={
+	    						name : '预测功耗',
+	    						type : 'line',
+	    						data : obj.data2
+	    					}
+	           				//option.series[1].data =obj.data2;
+	           				myChart.clear();
 	        				myChart.setOption(option);	
 	        				$("#main0").show();
 	                     },"json");
@@ -200,8 +296,8 @@
 				<option>杭州电子科技大学</option>
 			</select> 
 			<select id="buildingList">
-				<option value="1">第一教学楼</option>
 				<option value="2">第二教学楼</option>
+				<option value="1">第一教学楼</option>
 				<option value="3">第三教学楼</option>
 			</select> 
 			<select id="floorList">				
@@ -217,10 +313,11 @@
 			<button id="button1">按小时查看</button>
 			<button id="button2">按天查看</button>
 			<button id="button3">按月查看</button>
+			<button id="button4">查看当天预测功耗</button>
 			<div id="main0" class="chatMap" display="none"
-				style="width: 700px; height: 500px;"></div>
+				style="width: 700px; height: 300px;"></div>
 			<div id="main1" class="chatMap" display="none"
-				style="width: 700px; height: 500px;"></div>
+				style="width: 700px; height: 300px;"></div>
 			<script>
 				function f1() {
 					var data = [ {
